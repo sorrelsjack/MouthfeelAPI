@@ -15,9 +15,7 @@ router.post('/', FoodsController.add_food);
 router.get('/:id', FoodsController.get_food_details);
 
 // Recommended foods
-router.get('/recommended', function(req, res) {
-    res.send('Recommended foods')
-})
+router.get('/recommended', FoodsController.get_recommended_foods);
 
 // Add flavor -- prolly have another endpoint to add a flavor to the flavor list
 router.post('/flavors', FoodsController.add_food_flavor);

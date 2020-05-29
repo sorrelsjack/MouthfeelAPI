@@ -3,7 +3,6 @@ import { jsonify, config } from '.';
 const Connection = require('tedious').Connection;
 const Request = require('tedious').Request;
 
-// TODO: Make this more general. Accept req, res, and query as params
 // TODO: Incorporate errors here
 
 class DbConnection {
