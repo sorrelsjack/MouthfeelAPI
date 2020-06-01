@@ -10,12 +10,25 @@ const db = new DbConnection();
 */
 
 export const tallyVotes = async (req, res, mainTable, voteTable, key) => {
-    return await db.execute(req, res, 
+    const result = await db.execute(req, res, 
         `SELECT name, vote 
         FROM ${voteTable} 
         LEFT JOIN ${mainTable} ON ${voteTable}.${key} = ${mainTable}.id 
         WHERE food_id = ${req.params.id}`
     );
+
+    let summed = [];
+
+    result.forEach(r => {
+        const existing = summed.filter(i => { return i.name === r.name })[0];
+
+        if (!existing)
+            summed.push(r);
+        else
+            existing.vote += r.vote;
+    });
+
+    return summed;
     // ^ From above, just add all the numbers together, then we'll return it as an object
 };
 
