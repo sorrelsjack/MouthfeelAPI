@@ -3,7 +3,11 @@ import {
     config, 
     DbConnection, 
     tables, 
-    errors 
+    errors,
+    tallyFlavorVotes,
+    tallyTextureVotes,
+    tallyMiscVotes,
+    getFoodFromId
 } from '../common';
 
 const Connection = require('tedious').Connection;
@@ -11,7 +15,7 @@ const Request = require('tedious').Request;
 
 const db = new DbConnection();
 
-exports.get_all_foods = (req, res) => db.execute(req, res, `SELECT * FROM ${tables.foods}`);
+exports.get_all_foods = async (req, res) => res.send(await db.execute(req, res, `SELECT * FROM ${tables.foods}`));
 
 // Name and image are all that's required... Flavors, textures, and misc are highly encouraged
 /* {
@@ -50,18 +54,25 @@ exports.add_food = (req, res) => {
 // TODO: Standardize errors
 // TODO: Get all the stuff I need with this call (ingredients, flavors, textures, image, name)
 // TODO: Prolly make methods to get flavors, ingredients, textures, etc. Then we can call them anywhere in the app
-exports.get_food_details = (req, res) => {
+exports.get_food_details = async (req, res) => {
+    let foodDetails = {};
     // TODO: Throw error if nothing is returned... maybe have db.execute return something
-    // Get info on food
-    db.execute(req, res, `SELECT * FROM ${tables.foods} WHERE id = ${req.params.id}`);
-    // Get ids of all the flavors it matches, then tally up how many votes each ones has
-    db.execute(req, res, `SELECT * FROM ${tables.flavorVotes} WHERE food_id = ${req.params.id}`);
-    db.execute(req, res, `SELECT * FROM ${tables.textureVotes} WHERE food_id = ${req.params.id}`);
-    db.execute(req, res, `SELECT * FROM ${tables.miscVotes} WHERE food_id = ${req.params.id}`)
+
+    const food = getFoodFromId(req, res);
+    const flavorVotes = tallyFlavorVotes(req, res);
+    const textureVotes = tallyTextureVotes(req, res);
+    const miscVotes = tallyMiscVotes(req, res);
+
+    await Promise.all([food, flavorVotes, textureVotes, miscVotes]).then((values) => {
+        foodDetails = { ...foodDetails, food: values[0], flavors: values[1], textures: values[2], misc: values[3] };
+    });
+
+    res.send(foodDetails);
 };
 
 exports.get_recommended_foods = (req, res) => {};
 
+// TODO: If they want to 'unvote', delete that row from the DB
 exports.add_food_flavor = (req, res) => {
     const { flavor_id, user_id, food_id, vote } = req.body;
 

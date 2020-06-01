@@ -11,19 +11,21 @@ class DbConnection {
     }
 
     execute(req, res, query) {
-        const connection = new Connection(config);
-        connection.on('connect', error => {
-            if (error) console.error(error.message);
-            else {
-                const request = new Request(query, (error) => { if (error) console.error(error.message) })
-
-                request.on('doneInProc', (rowCount, more, rows) => {
-                    res.send(jsonify(rows));
-                });
-
-                connection.execSql(request);
-            }
-        });
+        return new Promise((resolve, reject) => {
+            const connection = new Connection(config);
+            connection.on('connect', error => {
+                if (error) console.error(error.message);
+                else {
+                    const request = new Request(query, (error) => { if (error) console.error(error.message) })
+    
+                    request.on('doneInProc', (rowCount, more, rows) => {
+                        resolve(jsonify(rows));
+                    });
+    
+                    connection.execSql(request);
+                }
+            });
+        })
     }
 }
 
