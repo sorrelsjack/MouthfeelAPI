@@ -28,9 +28,13 @@ exports.get_all_foods = async (req, res) => res.send(await db.execute(req, res, 
 // TODO: Validation to make sure it's not been added before... Check against name?
 // TODO: Upload image -- allow user to supply URL or image from gallery. Also, maybe allow carousel for multiple images?
 exports.add_food = (req, res) => {
-    if (!req.body.food || !req.body.image_url) return res.status(500).send('Internal server error');
+    const { food, image_url } = req.body;
 
-    const connection = new Connection(config);
+    if (!food || !image_url) return res.status(500).send(errors.MISSING_PARAMETERS);
+    // TODO: Do a string.join here with the optional params
+    res.send(db.execute(req, res, `INSERT INTO dbo.foods VALUES ('${food}', '${image_url}')`));
+
+    /*const connection = new Connection(config);
     connection.on('connect', error => {
         if (error)
             console.error(error.message);
@@ -47,12 +51,13 @@ exports.add_food = (req, res) => {
 
             connection.execSql(request);
         }
-    });
+    });*/
 };
 
 // TODO: Maybe account for injection lol
 // TODO: Standardize errors
 // TODO: Get all the stuff I need with this call (ingredients, flavors, textures, image, name)
+// TODO: Account for comments?
 // TODO: Prolly make methods to get flavors, ingredients, textures, etc. Then we can call them anywhere in the app
 exports.get_food_details = async (req, res) => {
     let foodDetails = {};
@@ -63,6 +68,7 @@ exports.get_food_details = async (req, res) => {
     const textureVotes = tallyTextureVotes(req, res);
     const miscVotes = tallyMiscVotes(req, res);
 
+    // TODO: Deal with errors in this Promise.all
     await Promise.all([food, flavorVotes, textureVotes, miscVotes]).then((values) => {
         foodDetails = { ...foodDetails, food: values[0], flavors: values[1], textures: values[2], misc: values[3] };
     });
@@ -77,8 +83,9 @@ exports.add_food_flavor = (req, res) => {
     const { flavor_id, user_id, food_id, vote } = req.body;
 
     if (!flavor_id || !user_id || !food_id || !vote) return res.status(500).send(errors.MISSING_PARAMETERS);
+    res.send(db.execute(req, res, `INSERT INTO ${tables.flavorVotes} VALUES ('${flavor_id}', '${user_id}', '${food_id}', ${vote})`));
 
-    const connection = new Connection(config);
+    /*const connection = new Connection(config);
     connection.on('connect', error => {
         if (error)
             console.error(error.message);
@@ -95,7 +102,7 @@ exports.add_food_flavor = (req, res) => {
 
             connection.execSql(request);
         }
-    });
+    });*/
 };
 
 exports.add_food_texture = (req, res) => {

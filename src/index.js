@@ -21,4 +21,5 @@ app.use('/misc', misc);
 app.use('/textures', textures);
 app.use('/users', users);
 
-app.listen(3000); // TODO: Delete when not testing locally
+if (process.env.IS_LOCAL === 'true')
+    app.listen(3000);

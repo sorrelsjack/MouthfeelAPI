@@ -9,9 +9,9 @@ const db = new DbConnection();
         WHERE food_id = 1
 */
 
-export const tallyVotes = async (req, res, mainTable, voteTable, key) => {
+const tallyVotes = async (req, res, mainTable, voteTable, key) => {
     const result = await db.execute(req, res, 
-        `SELECT name, vote 
+        `SELECT ${mainTable}.id, name, description, vote 
         FROM ${voteTable} 
         LEFT JOIN ${mainTable} ON ${voteTable}.${key} = ${mainTable}.id 
         WHERE food_id = ${req.params.id}`
@@ -25,11 +25,10 @@ export const tallyVotes = async (req, res, mainTable, voteTable, key) => {
         if (!existing)
             summed.push(r);
         else
-            existing.vote += r.vote;
+            existing.vote += r.vote; // TODO: Change the name in the object to votes or something
     });
 
     return summed;
-    // ^ From above, just add all the numbers together, then we'll return it as an object
 };
 
 export const tallyFlavorVotes = async (req, res) => await tallyVotes(req, res, tables.flavors, tables.flavorVotes, 'flavor_id');
