@@ -1,8 +1,8 @@
-import cors from 'cors';
-import express from 'express';
-import bodyParser from 'body-parser';
-
 require('dotenv').config();
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
 
 const foods = require('./routes/foods.js');
@@ -21,7 +21,4 @@ app.use('/misc', misc);
 app.use('/textures', textures);
 app.use('/users', users);
 
-if (process.env.IS_LOCAL === 'true')
-    app.listen(3000);
-else
-    app.listen(8080);
+app.listen(process.env.PORT || 8080);
