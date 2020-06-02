@@ -23,3 +23,5 @@ app.use('/users', users);
 
 if (process.env.IS_LOCAL === 'true')
     app.listen(3000);
+else
+    app.listen(8080);
