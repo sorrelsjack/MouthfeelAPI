@@ -1,8 +1,8 @@
-import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 
+require('dotenv').config();
 const app = express();
 
 const foods = require('./routes/foods.js');
