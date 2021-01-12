@@ -1,13 +1,8 @@
 const { 
-    jsonify,
-    config,
     DbConnection,
     tables,
     errors,
-    tallyFlavorVotes,
-    tallyTextureVotes,
-    tallyMiscVotes,
-    getFoodFromId 
+    util,
 } = require('../common');
 
 /*
@@ -69,10 +64,10 @@ exports.add_food = (req, res) => {
 exports.get_food_details = async (req, res) => {
     let foodDetails = {};
     // TODO: Throw error if nothing is returned... maybe have db.execute return something
-    const food = getFoodFromId(req, res);
-    const flavorVotes = tallyFlavorVotes(req, res);
-    const textureVotes = tallyTextureVotes(req, res);
-    const miscVotes = tallyMiscVotes(req, res);
+    const food = util.getFoodFromId(req, res);
+    const flavorVotes = util.tallyFlavorVotes(req, res);
+    const textureVotes = util.tallyTextureVotes(req, res);
+    const miscVotes = util.tallyMiscVotes(req, res);
 
     // TODO: Deal with errors in this Promise.all
     await Promise.all([food, flavorVotes, textureVotes, miscVotes]).then((values) => {
