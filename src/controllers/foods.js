@@ -1,14 +1,21 @@
-import { 
-    jsonify, 
-    config, 
-    DbConnection, 
-    tables, 
+const { 
+    jsonify,
+    config,
+    DbConnection,
+    tables,
     errors,
     tallyFlavorVotes,
     tallyTextureVotes,
     tallyMiscVotes,
-    getFoodFromId
-} from '../common';
+    getFoodFromId 
+} = require('../common');
+
+/*
+const DbConnection = require('../common/dbConnection');
+const tables = require('../common/tables');
+const errors = require('../common/errors');
+const tallyFlavorVotes = require('../common/')
+*/
 
 const Connection = require('tedious').Connection;
 const Request = require('tedious').Request;
@@ -75,7 +82,7 @@ exports.get_food_details = async (req, res) => {
     res.send(foodDetails);
 };
 
-exports.get_recommended_foods = (req, res) => {};
+exports.get_recommended_foods = (req, res) => { };
 
 // TODO: If they want to 'unvote', delete that row from the DB
 exports.add_food_flavor = (req, res) => {

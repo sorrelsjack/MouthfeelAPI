@@ -1,4 +1,4 @@
-import { tables, DbConnection } from '../common';
+const { tables, DbConnection } = require('../common');
 
 const db = new DbConnection();
 
@@ -34,10 +34,10 @@ const tallyVotes = async (req, res, mainTable, voteTable, key) => {
     return summed;
 };
 
-export const tallyFlavorVotes = async (req, res) => await tallyVotes(req, res, tables.flavors, tables.flavorVotes, 'flavor_id');
+module.exports.tallyFlavorVotes = async (req, res) => await tallyVotes(req, res, tables.flavors, tables.flavorVotes, 'flavor_id');
 
-export const tallyTextureVotes = async (req, res) => await tallyVotes(req, res, tables.textures, tables.textureVotes, 'texture_id');
+module.exports.tallyTextureVotes = async (req, res) => await tallyVotes(req, res, tables.textures, tables.textureVotes, 'texture_id');
 
-export const tallyMiscVotes = async (req, res) => await tallyVotes(req, res, tables.misc, tables.miscVotes, 'misc_id');
+module.exports.tallyMiscVotes = async (req, res) => await tallyVotes(req, res, tables.misc, tables.miscVotes, 'misc_id');
 
-export const getFoodFromId = async (req, res) => (await db.execute(req, res, `SELECT * FROM ${tables.foods} WHERE id = ${req.params.id}`))[0];
+module.exports.getFoodFromId = async (req, res) => (await db.execute(req, res, `SELECT * FROM ${tables.foods} WHERE id = ${req.params.id}`))[0];

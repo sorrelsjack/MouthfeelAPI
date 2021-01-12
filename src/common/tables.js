@@ -1,4 +1,4 @@
-export const tables = {
+module.exports = {
     comments: 'dbo.comments',
     flavorVotes: 'dbo.flavor_votes',
     flavors: 'dbo.flavors',

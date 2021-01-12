@@ -1,4 +1,5 @@
-import { jsonify, config } from '.';
+const { config } = require('.');
+const jsonify = require('../common/jsonify');
 
 const Connection = require('tedious').Connection;
 const Request = require('tedious').Request;
@@ -14,7 +15,7 @@ class DbConnection {
         return new Promise((resolve, reject) => {
             const connection = new Connection(config);
             connection.on('connect', error => {
-                if (error) console.error(error.message);
+                if (error) { console.error(error.message); }
                 else {
                     const request = new Request(query, (error) => { if (error) console.error(error.message) })
     
@@ -29,4 +30,4 @@ class DbConnection {
     }
 }
 
-export default DbConnection;
+module.exports = DbConnection;

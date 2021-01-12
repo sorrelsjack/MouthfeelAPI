@@ -1,6 +1,6 @@
-export * from './errors';
-export * from './jsonify';
-export * from './tables';
-export * from './dbConfig';
-export { default as DbConnection } from './dbConnection';
-export * from './util';
+exports.config = require('./dbConfig');
+exports.DbConnection = require('./dbConnection');
+exports.errors = require('./errors');
+exports.jsonify = require('./jsonify');
+exports.tables = require('./tables');
+exports.util = require('./util');

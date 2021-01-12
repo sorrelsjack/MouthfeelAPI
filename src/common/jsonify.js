@@ -1,4 +1,4 @@
-export const jsonify = (rows) => {
+module.exports = (rows) => {
     let array = [];
 
     rows.forEach(columns => {

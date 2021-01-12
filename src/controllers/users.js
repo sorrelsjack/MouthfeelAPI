@@ -1,4 +1,4 @@
-import { DbConnection, tables } from '../common';
+const { DbConnection, tables } = require('../common');
 
 const db = new DbConnection();
 

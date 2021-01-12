@@ -1,4 +1,4 @@
-export const config = {
+module.exports = {
     authentication: {
         options: {
             userName: process.env.SERVER_USERNAME,
