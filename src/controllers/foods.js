@@ -62,7 +62,6 @@ exports.add_food = (req, res) => {
 exports.get_food_details = async (req, res) => {
     let foodDetails = {};
     // TODO: Throw error if nothing is returned... maybe have db.execute return something
-
     const food = getFoodFromId(req, res);
     const flavorVotes = tallyFlavorVotes(req, res);
     const textureVotes = tallyTextureVotes(req, res);

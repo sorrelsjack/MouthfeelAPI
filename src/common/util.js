@@ -22,10 +22,13 @@ const tallyVotes = async (req, res, mainTable, voteTable, key) => {
     result.forEach(r => {
         const existing = summed.filter(i => { return i.name === r.name })[0];
 
-        if (!existing)
-            summed.push(r);
+        if (!existing) {
+            const voteValue = r.vote;
+            delete r.vote;
+            summed.push({ ...r, votes: voteValue });
+        }
         else
-            existing.vote += r.vote; // TODO: Change the name in the object to votes or something
+            existing.votes += r.vote; // TODO: Change the name in the object to votes or something
     });
 
     return summed;
